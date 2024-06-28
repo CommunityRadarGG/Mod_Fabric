@@ -43,7 +43,7 @@ public abstract class ChatHudMixin {
      * @param text The original chat message text to modify.
      * @return Returns the modified local variable.
      */
-    @ModifyVariable(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V", at = @At(value = "HEAD"), index = 1, argsOnly = true)
+    @ModifyVariable(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;Lnet/minecraft/client/gui/hud/MessageIndicator;)V", at = @At(value = "HEAD"), index = 1, argsOnly = true)
     private Text modifyChatMessages(final Text text) {
         if (!Utils.isOnGrieferGames()) {
             return text;

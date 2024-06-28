@@ -36,7 +36,7 @@ public abstract class PlayerEntityRendererMixin {
      * @param abstractClientPlayerEntity The needed local variable of the player entity.
      * @return Returns the modified local variable.
      */
-    @ModifyVariable(method = "renderLabelIfPresent(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "HEAD"), index = 2, argsOnly = true)
+    @ModifyVariable(method = "renderLabelIfPresent(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IF)V", at = @At(value = "HEAD"), index = 2, argsOnly = true)
     private Text modifyPlayerNameTag(final Text text, final @Local(index = 1, argsOnly = true) AbstractClientPlayerEntity abstractClientPlayerEntity) {
         if (!Utils.isOnGrieferGames()) {
             return text;

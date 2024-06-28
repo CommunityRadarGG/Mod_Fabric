@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -185,7 +185,7 @@ public class RadarList {
      * Loads a public list.
      */
     private void loadPublicList() {
-        try (final BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(this.url).openStream()))) {
+        try (final BufferedReader reader = new BufferedReader(new InputStreamReader(URI.create(url).toURL().openStream()))) {
             final List<RadarListEntry> players = RadarListManager.getGson()
                     .fromJson(reader, new TypeToken<List<RadarListEntry>>() {}.getType());
             players.forEach(this::loadRadarListEntry);
