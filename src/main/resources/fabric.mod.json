@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "communityradar",
+	"version": "${version}",
+	"name": "CommunityRadar",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"BlockyTheDev",
+        "MrMystery"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "Apache-2.0",
+	"icon": "assets/communityradar/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+            "io.github.communityradargg.fabric.CommunityRadarMod"
+		]
+	},
+	"mixins": [
+		"communityradar.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.20.4",
+		"java": ">=17",
+		"fabric-api": "*"
+	}
+}
