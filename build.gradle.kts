@@ -68,7 +68,14 @@ tasks {
 
         filteringCharset = Charsets.UTF_8.name()
         filesMatching("fabric.mod.json") {
-            expand("version" to project.version)
+            expand(
+                "version" to project.version,
+                "loader_version" to project.extra["loader_version"],
+                "minecraft_version" to project.extra["minecraft_version"],
+                "website" to project.extra["website"],
+                "source" to project.extra["source"],
+                "discord" to project.extra["discord"]
+            )
         }
     }
 

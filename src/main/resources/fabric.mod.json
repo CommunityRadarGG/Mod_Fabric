@@ -3,14 +3,15 @@
 	"id": "communityradar",
 	"version": "${version}",
 	"name": "CommunityRadar",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "CommunityRadar is a mod for viewing scammers and trusted players on GrieferGames.net and to manage your own player lists.",
 	"authors": [
 		"BlockyTheDev",
         "MrMystery"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "${website}",
+		"sources": "${source}",
+        "issues": "${discord}"
 	},
 	"license": "Apache-2.0",
 	"icon": "assets/communityradar/icon.png",
@@ -24,9 +25,16 @@
 		"communityradar.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.15.11",
-		"minecraft": "~1.21",
+		"fabricloader": ">=${loader_version}",
+		"minecraft": "~${minecraft_version}",
 		"java": ">=21",
-	}
 		"fabric-command-api-v2": "*"
+	},
+    "custom": {
+        "modmenu": {
+            "links": {
+                "modmenu.discord": "${discord}"
+            }
+        }
+    }
 }
