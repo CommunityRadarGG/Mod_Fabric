@@ -14,7 +14,7 @@
 	},
 	"license": "Apache-2.0",
 	"icon": "assets/communityradar/icon.png",
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {
 		"main": [
             "io.github.communityradargg.fabric.CommunityRadarMod"
