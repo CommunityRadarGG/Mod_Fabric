@@ -42,8 +42,15 @@ dependencies {
     mappings("net.fabricmc:yarn:${project.extra["yarn_mappings"]}:v2")
     modImplementation("net.fabricmc:fabric-loader:${project.extra["loader_version"]}")
 
-    // Fabric API. This is technically optional, but you probably want it anyway.
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${project.extra["fabric_version"]}")
+    // Make a set of all api modules we wish to use
+    setOf(
+        "fabric-api-base",
+        "fabric-command-api-v2"
+    ).forEach {
+        // Add each module as a dependency
+        modImplementation(fabricApi.module(it, project.extra["fabric_version"] as String))
+    }
+
 }
 
 java {
