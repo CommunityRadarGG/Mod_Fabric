@@ -16,7 +16,7 @@
 import org.cadixdev.gradle.licenser.LicenseExtension
 
 plugins {
-    id("fabric-loom") version("1.7-SNAPSHOT")
+    id("fabric-loom") version("1.10-SNAPSHOT")
     id("org.cadixdev.licenser") version("0.6.1")
     java
     idea
