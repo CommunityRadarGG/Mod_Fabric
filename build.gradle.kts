@@ -19,7 +19,6 @@ plugins {
     id("fabric-loom") version("1.10-SNAPSHOT")
     id("org.cadixdev.licenser") version("0.6.1")
     java
-    idea
 }
 
 version = project.extra["mod_version"] as String
@@ -98,13 +97,6 @@ tasks {
                 rename { "${it}_${project.base.archivesName.get()}" }
             }
         }
-    }
-}
-
-idea {
-    module {
-        isDownloadJavadoc = true
-        isDownloadSources = true
     }
 }
 
