@@ -1,13 +1,14 @@
 {
-    "required": true,
-    "package": "io.github.communityradargg.fabric.mixin",
-    "compatibilityLevel": "JAVA_21",
-    "injectors": {
-        "defaultRequire": 1
-    },
-    "client": [
-        "ChatHudMixin",
-        "PlayerEntityRendererMixin",
-        "PlayerListHudMixin"
-    ]
+  "required": true,
+  "package": "io.github.communityradargg.fabric.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "ChatHudMixin",
+    "PlayerEntityRendererMixin",
+    "PlayerEntityRenderStateMixin",
+    "PlayerListHudMixin"
+  ]
 }
