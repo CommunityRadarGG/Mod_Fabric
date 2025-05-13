@@ -1,0 +1,21 @@
+[versions]
+# Plugins
+fabricLoom = "1.10-SNAPSHOT"
+cadixdevLicenser = "0.6.1"
+
+# Libraries
+minecraft = "1.21.5"
+fabricYarn = "1.21.5+build.1"
+fabricLoader = "0.16.14"
+fabricApi = "0.124.0+1.21.5"
+
+[libraries]
+minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
+fabricYarn = { group = "net.fabricmc", name = "yarn", version.ref = "fabricYarn" }
+fabricLoader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fabricLoader" }
+
+[plugins]
+fabricLoom = { id = "fabric-loom", version.ref = "fabricLoom" }
+cadixdevLicenser = { id = "org.cadixdev.licenser", version.ref = "cadixdevLicenser" }
+
+[bundles]

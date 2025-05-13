@@ -16,9 +16,9 @@
 import org.cadixdev.gradle.licenser.LicenseExtension
 
 plugins {
-    id("fabric-loom") version("1.10-SNAPSHOT")
-    id("org.cadixdev.licenser") version("0.6.1")
-    java
+    id("java")
+    alias(libs.plugins.fabricLoom)
+    alias(libs.plugins.cadixdevLicenser)
 }
 
 version = project.extra["mod_version"] as String
@@ -29,17 +29,14 @@ base {
 }
 
 repositories {
-    flatDir {
-        dirs("lib")
-    }
     mavenCentral()
 }
 
 dependencies {
     // To change the versions see the gradle.properties file
-    minecraft("com.mojang:minecraft:${project.extra["minecraft_version"]}")
-    mappings("net.fabricmc:yarn:${project.extra["yarn_mappings"]}:v2")
-    modImplementation("net.fabricmc:fabric-loader:${project.extra["loader_version"]}")
+    minecraft(libs.minecraft)
+    mappings(libs.fabricYarn)
+    modImplementation(libs.fabricLoader)
 
     // Make a set of all api modules we wish to use
     setOf(
@@ -47,7 +44,7 @@ dependencies {
         "fabric-command-api-v2"
     ).forEach {
         // Add each module as a dependency
-        modImplementation(fabricApi.module(it, project.extra["fabric_version"] as String))
+        modImplementation(fabricApi.module(it, libs.versions.fabricApi.get()))
     }
 
 }
@@ -69,8 +66,8 @@ tasks {
         filesMatching("fabric.mod.json") {
             expand(
                 "version" to project.version,
-                "loader_version" to project.extra["loader_version"],
-                "minecraft_version" to project.extra["minecraft_version"],
+                "loader_version" to libs.versions.fabricLoader.get(),
+                "minecraft_version" to libs.versions.minecraft.get(),
                 "website" to project.extra["website"],
                 "source" to project.extra["source"],
                 "discord" to project.extra["discord"]
@@ -99,6 +96,7 @@ tasks {
         }
     }
 }
+
 
 configure<LicenseExtension> {
     newLine(false)
