@@ -44,7 +44,7 @@ public class RadarCommand {
 
     public static void register(final @NotNull CommandDispatcher<FabricClientCommandSource> dispatcher) {
         final LiteralCommandNode<FabricClientCommandSource> mainCommand = dispatcher.register(ClientCommandManager.literal(COMMAND_NAME)
-                .requires(source -> source.hasPermissionLevel(REQUIRED_PERMISSION_LEVEL))
+                .requires(source -> source.getPlayer().hasPermissionLevel(REQUIRED_PERMISSION_LEVEL))
                 .then(ClientCommandManager.literal("help")
                         .executes(context -> handleHelpSubcommand(context.getSource()))
                 )
