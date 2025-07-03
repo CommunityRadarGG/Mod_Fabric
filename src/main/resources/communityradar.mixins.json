@@ -5,7 +5,10 @@
   "injectors": {
     "defaultRequire": 1
   },
-  "client": [
+    "overwrites": {
+        "requireAnnotations": true
+    },
+    "client": [
     "ChatHudMixin",
     "PlayerEntityRendererMixin",
     "PlayerEntityRenderStateMixin",
