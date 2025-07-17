@@ -4,10 +4,10 @@ fabricLoom = "1.11-SNAPSHOT"
 cadixdevLicenser = "0.6.1"
 
 # Libraries
-minecraft = "1.21.7"
-fabricYarn = "1.21.7+build.2"
+minecraft = "1.21.8"
+fabricYarn = "1.21.8+build.1"
 fabricLoader = "0.16.14"
-fabricApi = "0.128.1+1.21.7"
+fabricApi = "0.129.0+1.21.8"
 
 [libraries]
 minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
