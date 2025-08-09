@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import org.cadixdev.gradle.licenser.LicenseExtension
 
 plugins {
     id("java")
     alias(libs.plugins.fabricLoom)
-    alias(libs.plugins.cadixdevLicenser)
+    alias(libs.plugins.spotless)
 }
 
 version = project.extra["mod_version"] as String
@@ -97,20 +96,18 @@ tasks {
     }
 }
 
-
-configure<LicenseExtension> {
-    newLine(false)
-    header(rootProject.file("HEADER"))
-
-    properties {
-        set("year", "2024 - present")
-        set("name", "CommunityRadarGG <https://community-radar.de/>")
+spotless {
+    java {
+        licenseHeaderFile(rootProject.file("HEADER"))
+        endWithNewline()
+        trimTrailingWhitespace()
+        removeUnusedImports()
+        removeWildcardImports()
     }
 
-    tasks {
-        create("gradle") {
-            @Suppress("UnstableAPIUsage") // needed at that location
-            files.from("build.gradle.kts", "settings.gradle.kts", "gradle.properties")
-        }
+    kotlin {
+        licenseHeaderFile(rootProject.file("HEADER"))
+        endWithNewline()
+        trimTrailingWhitespace()
     }
 }

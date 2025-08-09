@@ -1,7 +1,7 @@
 [versions]
 # Plugins
 fabricLoom = "1.11-SNAPSHOT"
-cadixdevLicenser = "0.6.1"
+spotless = "7.2.1"
 
 # Libraries
 minecraft = "1.21.8"
@@ -16,6 +16,6 @@ fabricLoader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "
 
 [plugins]
 fabricLoom = { id = "fabric-loom", version.ref = "fabricLoom" }
-cadixdevLicenser = { id = "org.cadixdev.licenser", version.ref = "cadixdevLicenser" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 
 [bundles]
