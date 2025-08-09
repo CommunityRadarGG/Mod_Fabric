@@ -57,20 +57,22 @@ java {
 }
 
 tasks {
+    val filterExpandProps = mapOf(
+        "version" to project.version,
+        "loader_version" to libs.versions.fabricLoader.get(),
+        "minecraft_version" to libs.versions.minecraft.get(),
+        "website" to project.extra.get("website") as String,
+        "source" to project.extra.get("source") as String,
+        "discord" to project.extra.get("discord") as String
+    )
+
     withType<ProcessResources> {
         // https://github.com/gradle/gradle/issues/861
         outputs.upToDateWhen { false }
 
         filteringCharset = Charsets.UTF_8.name()
         filesMatching("fabric.mod.json") {
-            expand(
-                "version" to project.version,
-                "loader_version" to libs.versions.fabricLoader.get(),
-                "minecraft_version" to libs.versions.minecraft.get(),
-                "website" to project.extra["website"],
-                "source" to project.extra["source"],
-                "discord" to project.extra["discord"]
-            )
+            expand(filterExpandProps)
         }
     }
 
