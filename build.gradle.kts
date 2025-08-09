@@ -57,6 +57,7 @@ java {
 }
 
 tasks {
+    var archivesName = project.base.archivesName.get()
     val filterExpandProps = mapOf(
         "version" to project.version,
         "loader_version" to libs.versions.fabricLoader.get(),
@@ -92,7 +93,7 @@ tasks {
 
         jar {
             from("LICENSE") {
-                rename { "${it}_${project.base.archivesName.get()}" }
+                rename { "${it}_${archivesName}" }
             }
         }
     }
