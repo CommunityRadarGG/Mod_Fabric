@@ -18,14 +18,14 @@ package io.github.communityradargg.fabric.mixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.communityradargg.fabric.accessors.PlayerEntityRenderStateAccessor;
 import io.github.communityradargg.fabric.utils.Utils;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
+import net.minecraft.entity.PlayerLikeEntity;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.UUID;
 
@@ -41,7 +41,15 @@ public abstract class PlayerEntityRendererMixin {
      * @param playerEntityRenderState The needed local variable of the player entity render state.
      * @return Returns the modified local variable.
      */
-    @ModifyVariable(method = "renderLabelIfPresent(Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "HEAD"), index = 2, argsOnly = true)
+    @ModifyArg(
+            method = "renderLabelIfPresent(Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/command/OrderedRenderCommandQueue;Lnet/minecraft/client/render/state/CameraRenderState;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/render/command/OrderedRenderCommandQueue;submitLabel(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/text/Text;ZIDLnet/minecraft/client/render/state/CameraRenderState;)V",
+                    ordinal = 1
+            ),
+            index = 2
+    )
     private Text modifyPlayerNameTag(final Text text, final @Local(index = 1, argsOnly = true) PlayerEntityRenderState playerEntityRenderState) {
         final UUID uuid = ((PlayerEntityRenderStateAccessor) playerEntityRenderState).communityradar_fabric$getPlayerUuid();
 
@@ -54,13 +62,13 @@ public abstract class PlayerEntityRendererMixin {
     /**
      * Modifies the player entity render state to set the self added uuid field.
      *
-     * @param abstractClientPlayerEntity The abstract client player entity as the uuid source.
+     * @param playerLikeEntity The player like entity as the source for the uuid.
      * @param playerEntityRenderState The player entity render state to set the uuid.
      * @param f The float f.
      * @param ci The callback info.
      */
-    @Inject(method = "updateRenderState(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;F)V", at = @At(value = "TAIL"))
-    private void modifyUpdateRenderState(final AbstractClientPlayerEntity abstractClientPlayerEntity, final PlayerEntityRenderState playerEntityRenderState, final float f, final CallbackInfo ci) {
-        ((PlayerEntityRenderStateAccessor) playerEntityRenderState).communityradar_fabric$setPlayerUuid(abstractClientPlayerEntity.getUuid());
+    @Inject(method = "updateRenderState(Lnet/minecraft/entity/PlayerLikeEntity;Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;F)V", at = @At(value = "TAIL"))
+    private void modifyUpdateRenderState(final PlayerLikeEntity playerLikeEntity, final PlayerEntityRenderState playerEntityRenderState, final float f, final CallbackInfo ci) {
+        ((PlayerEntityRenderStateAccessor) playerEntityRenderState).communityradar_fabric$setPlayerUuid(playerLikeEntity.getUuid());
     }
 }

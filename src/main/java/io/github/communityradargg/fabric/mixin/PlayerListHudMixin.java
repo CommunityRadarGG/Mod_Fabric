@@ -41,6 +41,6 @@ public abstract class PlayerListHudMixin {
         if (!Utils.isOnGrieferGames()) {
             return text;
         }
-        return Utils.includePrefixText(entry.getProfile().getId(), text);
+        return Utils.includePrefixText(entry.getProfile().id(), text);
     }
 }

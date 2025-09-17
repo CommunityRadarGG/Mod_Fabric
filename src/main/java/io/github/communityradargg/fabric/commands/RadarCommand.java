@@ -270,12 +270,12 @@ public class RadarCommand {
 
         boolean anyPlayerFound = false;
         for (final PlayerListEntry player : networkHandler.getPlayerList()) {
-            if (player.getProfile().getId() == null) {
+            if (player.getProfile().id() == null) {
                 continue;
             }
 
             final Optional<RadarListEntry> listEntryOptional = CommunityRadarMod.getListManager()
-                    .getRadarListEntry(player.getProfile().getId());
+                    .getRadarListEntry(player.getProfile().id());
             if (listEntryOptional.isEmpty()) {
                 // player uuid is on no list
                 continue;

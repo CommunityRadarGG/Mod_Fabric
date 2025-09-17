@@ -77,9 +77,9 @@ public class Utils {
 
         // checking if there is a player with same name in the loaded world. If so, returning the uuid from the profile
         for (final PlayerListEntry playerListEntry : networkHandler.getPlayerList()) {
-            if (playerListEntry.getProfile().getName().equalsIgnoreCase(playerName)) {
-                uuidNameCache.put(playerName, playerListEntry.getProfile().getId());
-                return CompletableFuture.completedFuture(Optional.of(playerListEntry.getProfile().getId()));
+            if (playerListEntry.getProfile().name().equalsIgnoreCase(playerName)) {
+                uuidNameCache.put(playerName, playerListEntry.getProfile().id());
+                return CompletableFuture.completedFuture(Optional.of(playerListEntry.getProfile().id()));
             }
         }
 
