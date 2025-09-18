@@ -1,35 +1,35 @@
 {
-	"schemaVersion": 1,
-	"id": "communityradar",
-	"version": "${version}",
-	"name": "CommunityRadar",
-	"description": "CommunityRadar is a mod for viewing scammers and trusted players on GrieferGames.net and to manage your own player lists.",
-	"authors": [
-		"BlockyTheDev",
+    "schemaVersion": 1,
+    "id": "communityradar",
+    "version": "${version}",
+    "name": "CommunityRadar",
+    "description": "CommunityRadar is a mod for viewing scammers and trusted players on GrieferGames.net and to manage your own player lists.",
+    "authors": [
+        "BlockyTheDev",
         "MrMystery"
-	],
-	"contact": {
-		"homepage": "${website}",
-		"sources": "${source}",
+    ],
+    "contact": {
+        "homepage": "${website}",
+        "sources": "${source}",
         "issues": "${discord}"
-	},
-	"license": "Apache-2.0",
-	"icon": "assets/communityradar/icon.png",
-	"environment": "client",
-	"entrypoints": {
-		"main": [
+    },
+    "license": "Apache-2.0",
+    "icon": "assets/communityradar/icon.png",
+    "environment": "client",
+    "entrypoints": {
+        "main": [
             "io.github.communityradargg.fabric.CommunityRadarMod"
-		]
-	},
-	"mixins": [
-		"communityradar.mixins.json"
-	],
-	"depends": {
-		"fabricloader": ">=${loader_version}",
-		"minecraft": "~${minecraft_version}",
-		"java": ">=21",
-		"fabric-command-api-v2": "*"
-	},
+        ]
+    },
+    "mixins": [
+        "communityradar.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=${loader_version}",
+        "minecraft": "~${minecraft_version}",
+        "java": ">=21",
+        "fabric-command-api-v2": "*"
+    },
     "custom": {
         "modmenu": {
             "links": {
