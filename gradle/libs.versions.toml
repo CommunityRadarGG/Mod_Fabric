@@ -5,7 +5,7 @@ spotless = "7.2.1"
 
 # Libraries
 minecraft = "1.21.9-pre1"
-fabricYarn = "1.21.9-pre1+build.7"
+fabricYarn = "1.21.9-pre1+build.10"
 fabricLoader = "0.17.2"
 fabricApi = "0.133.7+1.21.9"
 
