@@ -4,10 +4,10 @@ fabricLoom = "1.11-SNAPSHOT"
 spotless = "7.2.1"
 
 # Libraries
-minecraft = "1.21.9-pre2"
-fabricYarn = "1.21.9-pre2+build.2"
+minecraft = "1.21.9-pre3"
+fabricYarn = "1.21.9-pre3+build.1"
 fabricLoader = "0.17.2"
-fabricApi = "0.133.8+1.21.9"
+fabricApi = "0.133.10+1.21.9"
 
 [libraries]
 minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
