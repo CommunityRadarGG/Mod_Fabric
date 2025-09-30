@@ -4,8 +4,8 @@ fabricLoom = "1.11-SNAPSHOT"
 spotless = "7.2.1"
 
 # Libraries
-minecraft = "1.21.9-rc1"
-fabricYarn = "1.21.9-rc1+build.2"
+minecraft = "1.21.9"
+fabricYarn = "1.21.9+build.1"
 fabricLoader = "0.17.2"
 fabricApi = "0.133.14+1.21.9"
 
