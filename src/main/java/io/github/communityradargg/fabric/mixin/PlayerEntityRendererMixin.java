@@ -45,10 +45,10 @@ public abstract class PlayerEntityRendererMixin {
             method = "renderLabelIfPresent(Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/command/OrderedRenderCommandQueue;Lnet/minecraft/client/render/state/CameraRenderState;)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/render/command/OrderedRenderCommandQueue;submitLabel(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/text/Text;ZIDLnet/minecraft/client/render/state/CameraRenderState;)V",
+                    target = "Lnet/minecraft/client/render/command/OrderedRenderCommandQueue;submitLabel(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Vec3d;ILnet/minecraft/text/Text;ZIDLnet/minecraft/client/render/state/CameraRenderState;)V",
                     ordinal = 1
             ),
-            index = 2
+            index = 3
     )
     private Text modifyPlayerNameTag(final Text text, final @Local(index = 1, argsOnly = true) PlayerEntityRenderState playerEntityRenderState) {
         final UUID uuid = ((PlayerEntityRenderStateAccessor) playerEntityRenderState).communityradar_fabric$getPlayerUuid();
