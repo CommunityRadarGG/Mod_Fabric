@@ -76,18 +76,18 @@ public class CommunityRadarMod implements ModInitializer {
     }
 
     /**
-     * Gets the mod version for a given modid.
+     * Gets the mod version for a given mod id.
      *
-     * @param modid The modid to get the version for.
+     * @param modId The mod-id to get the version for.
      * @return Returns the version in a friendly String.
-     * @throws IllegalArgumentException Thrown, when the mod container cannot be got for the given modid.
+     * @throws IllegalArgumentException Thrown, when the mod container cannot be got for the given mod id.
      */
-    public static @NotNull String getModVersion(final @NotNull String modid) {
-        final Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer(modid);
+    public static @NotNull String getModVersion(final @NotNull String modId) {
+        final Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer(modId);
         if (modContainer.isPresent()) {
             return modContainer.get().getMetadata().getVersion().getFriendlyString();
         }
-        throw new IllegalArgumentException("Cannot get the version for the given modid: " + modid);
+        throw new IllegalArgumentException("Cannot get the version for the given mod id: " + modId);
     }
 
     /**
@@ -100,9 +100,9 @@ public class CommunityRadarMod implements ModInitializer {
     }
 
     /**
-     * Gets the modid.
+     * Gets the mod id.
      *
-     * @return Returns the modid.
+     * @return Returns the mod id.
      */
     public static @NotNull String getModId() {
         return MOD_ID;
