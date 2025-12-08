@@ -103,7 +103,7 @@ public class Utils {
         final HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(uri)
                 .timeout(Duration.ofSeconds(3))
-                .header("User-Agent", CommunityRadarMod.getModid() + "/" + CommunityRadarMod.getVersion())
+                .header("User-Agent", CommunityRadarMod.getModId() + "/" + CommunityRadarMod.getVersion())
                 .GET()
                 .build();
 

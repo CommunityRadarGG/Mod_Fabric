@@ -31,15 +31,15 @@ import java.util.Optional;
 
 public class CommunityRadarMod implements ModInitializer {
     /** The id of the mod. */
-    private static final String MODID = "communityradar";
+    private static final String MOD_ID = "communityradar";
     /** The version of the mod. */
-    private static final String VERSION = getModVersion(MODID);
+    private static final String VERSION = getModVersion(MOD_ID);
     private static final Logger logger = LogManager.getLogger(CommunityRadarMod.class);
     private static RadarListManager listManager;
 
 	@Override
 	public void onInitialize() {
-        logger.info("Starting the mod '{}' with the version '{}'!", MODID, VERSION);
+        logger.info("Starting the mod '{}' with the version '{}'!", MOD_ID, VERSION);
         final File directoryPath = Paths.get(new File("")
                         .getAbsolutePath(),"communityradar", "lists")
                 .toFile();
@@ -52,7 +52,7 @@ public class CommunityRadarMod implements ModInitializer {
         // Needs to be after loading public lists
         listManager.loadPrivateLists();
         registerCommands();
-        logger.info("Successfully started the mod '{}'!", MODID);
+        logger.info("Successfully started the mod '{}'!", MOD_ID);
 	}
 
     /**
@@ -104,8 +104,8 @@ public class CommunityRadarMod implements ModInitializer {
      *
      * @return Returns the modid.
      */
-    public static @NotNull String getModid() {
-        return MODID;
+    public static @NotNull String getModId() {
+        return MOD_ID;
     }
 
     /**
