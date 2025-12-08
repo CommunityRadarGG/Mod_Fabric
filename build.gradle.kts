@@ -107,7 +107,8 @@ spotless {
         endWithNewline()
         trimTrailingWhitespace()
         removeUnusedImports()
-        removeWildcardImports()
+        forbidWildcardImports()
+        forbidModuleImports()
     }
 
     kotlin {
