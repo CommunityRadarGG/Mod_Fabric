@@ -5,13 +5,11 @@ spotless = "8.1.0"
 
 # Libraries
 minecraft = "1.21.11-rc3"
-fabricYarn = "1.21.11-rc3+build.1"
 fabricLoader = "0.18.1"
 fabricApi = "0.139.4+1.21.11"
 
 [libraries]
 minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
-fabricYarn = { group = "net.fabricmc", name = "yarn", version.ref = "fabricYarn" }
 fabricLoader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fabricLoader" }
 
 [plugins]

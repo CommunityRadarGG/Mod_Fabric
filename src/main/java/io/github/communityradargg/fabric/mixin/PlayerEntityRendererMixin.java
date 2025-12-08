@@ -18,10 +18,10 @@ package io.github.communityradargg.fabric.mixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.communityradargg.fabric.accessors.PlayerEntityRenderStateAccessor;
 import io.github.communityradargg.fabric.utils.Utils;
-import net.minecraft.client.render.entity.PlayerEntityRenderer;
-import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
-import net.minecraft.entity.PlayerLikeEntity;
-import net.minecraft.text.Text;
+import net.minecraft.client.renderer.entity.player.AvatarRenderer;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Avatar;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -30,45 +30,45 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.UUID;
 
 /**
- * An abstract Mixin class for {@link PlayerEntityRenderer}.
+ * An abstract Mixin class for {@link AvatarRenderer}.
  */
-@Mixin(PlayerEntityRenderer.class)
+@Mixin(AvatarRenderer.class)
 public abstract class PlayerEntityRendererMixin {
     /**
      * Modifies the player name tag. This gets called once every tick with the original non-modified prefix.
      *
-     * @param text The original text to modify.
-     * @param playerEntityRenderState The needed local variable of the player entity render state.
+     * @param component The original component to modify.
+     * @param avatarRenderState The needed local variable of the avatar render state.
      * @return Returns the modified local variable.
      */
     @ModifyArg(
-            method = "renderLabelIfPresent(Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/command/OrderedRenderCommandQueue;Lnet/minecraft/client/render/state/CameraRenderState;)V",
+            method = "submitNameTag(Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/CameraRenderState;)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/render/command/OrderedRenderCommandQueue;submitLabel(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Vec3d;ILnet/minecraft/text/Text;ZIDLnet/minecraft/client/render/state/CameraRenderState;)V",
+                    target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitNameTag(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/phys/Vec3;ILnet/minecraft/network/chat/Component;ZIDLnet/minecraft/client/renderer/state/CameraRenderState;)V",
                     ordinal = 1
             ),
             index = 3
     )
-    private Text modifyPlayerNameTag(final Text text, final @Local(index = 1, argsOnly = true) PlayerEntityRenderState playerEntityRenderState) {
-        final UUID uuid = ((PlayerEntityRenderStateAccessor) playerEntityRenderState).communityradar_fabric$getPlayerUuid();
+    private Component modifyPlayerNameTag(final Component component, final @Local(index = 1, argsOnly = true) AvatarRenderState avatarRenderState) {
+        final UUID uuid = ((PlayerEntityRenderStateAccessor) avatarRenderState).communityradar_fabric$getPlayerUuid();
 
         if (uuid == null || !Utils.isOnGrieferGames()) {
-            return text;
+            return component;
         }
-        return Utils.includePrefixText(uuid, text);
+        return Utils.includePrefixText(uuid, component);
     }
 
     /**
      * Modifies the player entity render state to set the self added uuid field.
      *
-     * @param playerLikeEntity The player like entity as the source for the uuid.
-     * @param playerEntityRenderState The player entity render state to set the uuid.
+     * @param avatar The avatar as the source for the uuid.
+     * @param avatarRenderState The avatar render state to set the uuid.
      * @param f The float f.
      * @param ci The callback info.
      */
-    @Inject(method = "updateRenderState(Lnet/minecraft/entity/PlayerLikeEntity;Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;F)V", at = @At(value = "TAIL"))
-    private void modifyUpdateRenderState(final PlayerLikeEntity playerLikeEntity, final PlayerEntityRenderState playerEntityRenderState, final float f, final CallbackInfo ci) {
-        ((PlayerEntityRenderStateAccessor) playerEntityRenderState).communityradar_fabric$setPlayerUuid(playerLikeEntity.getUuid());
+    @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/Avatar;Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;F)V", at = @At(value = "TAIL"))
+    private void modifyUpdateRenderState(final Avatar avatar, final AvatarRenderState avatarRenderState, final float f, final CallbackInfo ci) {
+        ((PlayerEntityRenderStateAccessor) avatarRenderState).communityradar_fabric$setPlayerUuid(avatar.getUUID());
     }
 }

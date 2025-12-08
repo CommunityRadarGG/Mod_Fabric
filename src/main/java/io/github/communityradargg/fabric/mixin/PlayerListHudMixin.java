@@ -18,29 +18,29 @@ package io.github.communityradargg.fabric.mixin;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.communityradargg.fabric.utils.Utils;
-import net.minecraft.client.gui.hud.PlayerListHud;
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.components.PlayerTabOverlay;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 /**
- * An abstract Mixin class for {@link PlayerListHudMixin}.
+ * An abstract Mixin class for {@link PlayerTabOverlay}.
  */
-@Mixin(PlayerListHud.class)
+@Mixin(PlayerTabOverlay.class)
 public abstract class PlayerListHudMixin {
     /**
-     * Modifies the player player-list entry text. This gets called when the player-list entry gets updated.
+     * Modifies the player info component. This gets called when the player info gets updated.
      *
-     * @param text The original chat message text to modify.
-     * @param entry The needed local variable of the player list entry.
+     * @param component The original chat message component to modify.
+     * @param playerInfo The needed local variable of the player info.
      * @return Returns the modified local variable.
      */
-    @ModifyReturnValue(method = "getPlayerName", at = @At("RETURN"))
-    private Text modifyGetPlayerName(final Text text, final @Local(argsOnly = true) PlayerListEntry entry) {
+    @ModifyReturnValue(method = "getNameForDisplay", at = @At("RETURN"))
+    private Component modifyGetPlayerName(final Component component, final @Local(argsOnly = true) PlayerInfo playerInfo) {
         if (!Utils.isOnGrieferGames()) {
-            return text;
+            return component;
         }
-        return Utils.includePrefixText(entry.getProfile().id(), text);
+        return Utils.includePrefixText(playerInfo.getProfile().id(), component);
     }
 }
