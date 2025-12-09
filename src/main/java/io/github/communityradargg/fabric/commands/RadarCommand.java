@@ -29,9 +29,11 @@ import io.github.communityradargg.fabric.utils.RadarMessage;
 import io.github.communityradargg.fabric.utils.Utils;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.server.permissions.Permission;
+import net.minecraft.server.permissions.PermissionLevel;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
@@ -40,11 +42,11 @@ import java.util.UUID;
 public class RadarCommand {
     private static final String COMMAND_NAME = "radar";
     private static final List<String> COMMAND_ALIASES = List.of("communityradar", "scammer", "trustedmm", "mm");
-    private static final int REQUIRED_PERMISSION_LEVEL = 0;
+    private static final PermissionLevel REQUIRED_PERMISSION_LEVEL = PermissionLevel.ALL;
 
     public static void register(final @NotNull CommandDispatcher<FabricClientCommandSource> dispatcher) {
         final LiteralCommandNode<FabricClientCommandSource> mainCommand = dispatcher.register(ClientCommandManager.literal(COMMAND_NAME)
-                .requires(source -> source.getPlayer().hasPermissionLevel(REQUIRED_PERMISSION_LEVEL))
+                .requires(source -> source.getPlayer().permissions().hasPermission(new Permission.HasCommandLevel(REQUIRED_PERMISSION_LEVEL)))
                 .then(ClientCommandManager.literal("help")
                         .executes(context -> handleHelpSubcommand(context.getSource()))
                 )
@@ -160,7 +162,7 @@ public class RadarCommand {
      */
     private static int handleMissingArgs(final @NotNull FabricClientCommandSource source) {
         source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.MISSING_ARGS)
-                .build().toText());
+                .build().toComponent());
         return Command.SINGLE_SUCCESS;
     }
 
@@ -173,7 +175,7 @@ public class RadarCommand {
     private static int handleHelpSubcommand(final @NotNull FabricClientCommandSource source) {
         source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.HELP)
                 .replace("{code_version}", CommunityRadarMod.getVersion())
-                .excludePrefix().build().toText());
+                .excludePrefix().build().toComponent());
         return Command.SINGLE_SUCCESS;
     }
 
@@ -195,11 +197,11 @@ public class RadarCommand {
             // players on the list
             source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.Lists.FOUND)
                     .replace("{lists}", listsText.substring(0, listsText.length() - 2))
-                    .build().toText());
+                    .build().toComponent());
         } else {
             // list is empty
             source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.Lists.EMPTY)
-                    .build().toText());
+                    .build().toComponent());
         }
     }
 
@@ -226,13 +228,13 @@ public class RadarCommand {
      */
     private static void handleCheckPlayerSubcommand(final @NotNull FabricClientCommandSource source, final @NotNull String playerArgument) {
         source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.INPUT_PROCESSING)
-                .build().toText());
+                .build().toComponent());
 
         Utils.getUUID(playerArgument).thenAccept(checkPlayerOptional -> {
             if (checkPlayerOptional.isEmpty()) {
                 // player uuid could not be fetched
                 source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.Check.FAILED)
-                        .build().toText());
+                        .build().toComponent());
                 return;
             }
 
@@ -240,7 +242,7 @@ public class RadarCommand {
             if (entryOptional.isEmpty()) {
                 // player uuid is on no list
                 source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.Check.FAILED)
-                        .build().toText());
+                        .build().toComponent());
                 return;
             }
 
@@ -251,7 +253,7 @@ public class RadarCommand {
                     .replace("{cause}", entry.cause())
                     .replace("{entryCreationDate}", Utils.formatDateTime(entry.entryCreationDate()))
                     .replace("{entryUpdateDate}", Utils.formatDateTime(entry.entryUpdateDate()))
-                    .build().toText());
+                    .build().toComponent());
         });
     }
 
@@ -261,21 +263,21 @@ public class RadarCommand {
      * @param source The command source, which executed the subcommand.
      */
     private static void handleCheckAllSubcommand(final @NotNull FabricClientCommandSource source) {
-        final ClientPlayNetworkHandler networkHandler = MinecraftClient.getInstance().getNetworkHandler();
-        if (networkHandler == null) {
+        final ClientPacketListener clientPacketListener = Minecraft.getInstance().getConnection();
+        if (clientPacketListener == null) {
             source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.Check.NOT_FOUND)
-                    .build().toText());
+                    .build().toComponent());
             return;
         }
 
         boolean anyPlayerFound = false;
-        for (final PlayerListEntry player : networkHandler.getPlayerList()) {
-            if (player.getProfile().id() == null) {
+        for (final PlayerInfo playerInfo : clientPacketListener.getOnlinePlayers()) {
+            if (playerInfo.getProfile().id() == null) {
                 continue;
             }
 
             final Optional<RadarListEntry> listEntryOptional = CommunityRadarMod.getListManager()
-                    .getRadarListEntry(player.getProfile().id());
+                    .getRadarListEntry(playerInfo.getProfile().id());
             if (listEntryOptional.isEmpty()) {
                 // player uuid is on no list
                 continue;
@@ -283,7 +285,7 @@ public class RadarCommand {
 
             if (!anyPlayerFound) {
                 source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.Check.EVERYONE)
-                        .build().toText());
+                        .build().toComponent());
                 anyPlayerFound = true;
             }
 
@@ -294,12 +296,12 @@ public class RadarCommand {
                     .replace("{cause}", entry.cause())
                     .replace("{entryCreationDate}", Utils.formatDateTime(entry.entryCreationDate()))
                     .replace("{entryUpdateDate}", Utils.formatDateTime(entry.entryUpdateDate()))
-                    .build().toText());
+                    .build().toComponent());
         }
 
         if (!anyPlayerFound) {
             source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.Check.NOT_FOUND)
-                    .build().toText());
+                    .build().toComponent());
         }
     }
 
@@ -315,17 +317,17 @@ public class RadarCommand {
         if (listOptional.isEmpty()) {
             // list not existing
             source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.Player.ADD_FAILED)
-                    .build().toText());
+                    .build().toComponent());
             return;
         }
 
         source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.INPUT_PROCESSING)
-                .build().toText());
+                .build().toComponent());
         Utils.getUUID(player).thenAccept(uuidOptional -> {
             if (uuidOptional.isEmpty()) {
                 // player uuid could not be fetched
                 source.sendFeedback(new RadarMessage.RadarMessageBuilder(player.startsWith("!") ? Messages.Player.NAME_INVALID_BEDROCK : Messages.Player.NAME_INVALID)
-                        .build().toText());
+                        .build().toComponent());
                 return;
             }
 
@@ -333,19 +335,19 @@ public class RadarCommand {
             if (listOptional.get().isInList(uuid)) {
                 // player already on list
                 source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.Player.ADD_IN_LIST)
-                        .build().toText());
+                        .build().toComponent());
                 return;
             }
 
             if (!CommunityRadarMod.getListManager().addRadarListEntry(namespace, uuid, player, cause)) {
                 // list is not private
                 source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.Player.ADD_FAILED)
-                        .build().toText());
+                        .build().toComponent());
                 return;
             }
 
             source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.Player.ADD_SUCCESS)
-                    .build().toText());
+                    .build().toComponent());
         });
     }
 
@@ -360,18 +362,18 @@ public class RadarCommand {
         if (listOptional.isEmpty()) {
             // list is not existing
             source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.Player.REMOVE_FAILED)
-                    .build().toText());
+                    .build().toComponent());
             return;
         }
 
         source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.INPUT_PROCESSING)
-                .build().toText());
+                .build().toComponent());
         final RadarList list = listOptional.get();
         Utils.getUUID(player).thenAccept(uuidOptional -> {
             if (uuidOptional.isEmpty()) {
                 // player uuid could not be fetched
                 source.sendFeedback(new RadarMessage.RadarMessageBuilder(player.startsWith("!") ? Messages.Player.NAME_INVALID_BEDROCK : Messages.Player.NAME_INVALID)
-                        .build().toText());
+                        .build().toComponent());
                 return;
             }
 
@@ -379,13 +381,13 @@ public class RadarCommand {
             if (!list.isInList(uuid)) {
                 // player uuid not on list
                 source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.Player.REMOVE_NOT_IN_LIST)
-                        .build().toText());
+                        .build().toComponent());
                 return;
             }
 
             list.getPlayerMap().remove(uuid);
             source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.Player.REMOVE_SUCCESS)
-                    .build().toText());
+                    .build().toComponent());
         });
     }
 
@@ -398,19 +400,19 @@ public class RadarCommand {
         if (CommunityRadarMod.getListManager().getRadarList(namespace).isPresent()) {
             // list already existing
             source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.List.CREATE_FAILED)
-                    .build().toText());
+                    .build().toComponent());
             return;
         }
 
         if (!CommunityRadarMod.getListManager().registerPrivateList(namespace, prefix)) {
             // list could not be registered
             source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.List.CREATE_FAILED)
-                    .build().toText());
+                    .build().toComponent());
             return;
         }
 
         source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.List.CREATE_SUCCESS)
-                .build().toText());
+                .build().toComponent());
     }
 
     /**
@@ -423,12 +425,12 @@ public class RadarCommand {
         if (!listManager.unregisterList(namespace)) {
             // list is not existing, list is not private, file cannot be deleted
             source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.List.DELETE_FAILED)
-                    .build().toText());
+                    .build().toComponent());
             return;
         }
 
         source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.List.DELETE_SUCCESS)
-                .build().toText());
+                .build().toComponent());
     }
 
     /**
@@ -441,7 +443,7 @@ public class RadarCommand {
         if (listOptional.isEmpty()) {
             // list is not existing
             source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.List.SHOW_FAILED)
-                    .build().toText());
+                    .build().toComponent());
             return;
         }
 
@@ -449,7 +451,7 @@ public class RadarCommand {
         if (list.getPlayerMap().isEmpty()) {
             // list is empty
             source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.List.SHOW_EMPTY)
-                    .build().toText());
+                    .build().toComponent());
             return;
         }
 
@@ -459,7 +461,7 @@ public class RadarCommand {
                 .replace("{list}", list.getNamespace())
                 .replaceWithColorCodes("{prefix}", listOptional.get().getPrefix())
                 .replace("{players}", players.substring(0, players.length() - 2))
-                .build().toText());
+                .build().toComponent());
     }
 
     /**
@@ -473,7 +475,7 @@ public class RadarCommand {
         if (listOptional.isEmpty()) {
             // list is not existing
             source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.List.PREFIX_FAILED)
-                    .build().toText());
+                    .build().toComponent());
             return;
         }
 
@@ -483,6 +485,6 @@ public class RadarCommand {
 
         source.sendFeedback(new RadarMessage.RadarMessageBuilder(Messages.List.PREFIX_SUCCESS)
                 .replaceWithColorCodes("{prefix}", prefix)
-                .build().toText());
+                .build().toComponent());
     }
 }

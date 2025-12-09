@@ -34,7 +34,7 @@ repositories {
 dependencies {
     // To change the versions see the gradle.properties file
     minecraft(libs.minecraft)
-    mappings(libs.fabricYarn)
+    mappings(loom.officialMojangMappings())
     modImplementation(libs.fabricLoader)
 
     // Make a set of all api modules we wish to use

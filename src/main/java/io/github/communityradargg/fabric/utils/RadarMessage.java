@@ -15,7 +15,7 @@
  */
 package io.github.communityradargg.fabric.utils;
 
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,12 +35,12 @@ public class RadarMessage {
     }
 
     /**
-     * Converts this class instance to a {@link Text}.
+     * Converts this class instance to a {@link Component}.
      *
-     * @return Returns the text converted to a {@link Text}.
+     * @return Returns the text converted to a {@link Component}.
      */
-    public @NotNull Text toText() {
-        return Text.of(text);
+    public @NotNull Component toComponent() {
+        return Component.nullToEmpty(text);
     }
 
     /**

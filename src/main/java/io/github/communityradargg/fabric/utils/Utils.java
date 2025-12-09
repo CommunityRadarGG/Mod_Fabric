@@ -18,11 +18,11 @@ package io.github.communityradargg.fabric.utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.github.communityradargg.fabric.CommunityRadarMod;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.network.ClientConnection;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -64,8 +64,8 @@ public class Utils {
      * @return Returns a CompletableFuture with an optional with the player uuid.
      */
     public static @NotNull CompletableFuture<Optional<UUID>> getUUID(final @NotNull String playerName) {
-        final ClientPlayNetworkHandler networkHandler = MinecraftClient.getInstance().getNetworkHandler();
-        if (networkHandler == null || networkHandler.getWorld() == null) {
+        final ClientPacketListener clientPacketListener = Minecraft.getInstance().getConnection();
+        if (clientPacketListener == null) {
             // user has to be in a world
             return CompletableFuture.completedFuture(Optional.empty());
         }
@@ -76,10 +76,10 @@ public class Utils {
         }
 
         // checking if there is a player with same name in the loaded world. If so, returning the uuid from the profile
-        for (final PlayerListEntry playerListEntry : networkHandler.getPlayerList()) {
-            if (playerListEntry.getProfile().name().equalsIgnoreCase(playerName)) {
-                uuidNameCache.put(playerName, playerListEntry.getProfile().id());
-                return CompletableFuture.completedFuture(Optional.of(playerListEntry.getProfile().id()));
+        for (final PlayerInfo playerInfo : clientPacketListener.getOnlinePlayers()) {
+            if (playerInfo.getProfile().name().equalsIgnoreCase(playerName)) {
+                uuidNameCache.put(playerName, playerInfo.getProfile().id());
+                return CompletableFuture.completedFuture(Optional.of(playerInfo.getProfile().id()));
             }
         }
 
@@ -103,7 +103,7 @@ public class Utils {
         final HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(uri)
                 .timeout(Duration.ofSeconds(3))
-                .header("User-Agent", CommunityRadarMod.getModid() + "/" + CommunityRadarMod.getVersion())
+                .header("User-Agent", CommunityRadarMod.getModId() + "/" + CommunityRadarMod.getVersion())
                 .GET()
                 .build();
 
@@ -168,34 +168,34 @@ public class Utils {
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted") // better readable this way
     public static boolean isOnGrieferGames() {
-        final ClientPlayNetworkHandler networkHandler = MinecraftClient.getInstance().getNetworkHandler();
-        if (networkHandler == null) {
+        final ClientPacketListener clientPacketListener = Minecraft.getInstance().getConnection();
+        if (clientPacketListener == null) {
             return false;
         }
 
-        final ClientConnection connection = networkHandler.getConnection();
-        if (connection.isLocal() || !(connection.getAddress() instanceof InetSocketAddress inetSocketAddress)) {
+        final Connection connection = clientPacketListener.getConnection();
+        if (connection.isMemoryConnection() || !(connection.getRemoteAddress() instanceof InetSocketAddress inetSocketAddress)) {
             return false;
         }
         return isGrieferGamesHostName(inetSocketAddress.getHostName());
     }
 
     /**
-     * Builds the new text including the radar prefix.
+     * Builds the new component including the radar prefix.
      *
-     * @param playerUuid The uuid of the player to get the text with the radar prefix for.
-     * @param oldNameTagText The old text that should be extended, if needed.
-     * @return The new text for the including the radar prefix.
+     * @param playerUuid The uuid of the player to get the component with the radar prefix for.
+     * @param oldNameTagComponent The old component that should be extended, if needed.
+     * @return The new component including the radar prefix.
      */
-    public static Text includePrefixText(final @NotNull UUID playerUuid, final @NotNull Text oldNameTagText) {
+    public static Component includePrefixComponent(final @NotNull UUID playerUuid, final @NotNull Component oldNameTagComponent) {
         final String addonPrefix = CommunityRadarMod.getListManager()
                 .getPrefix(playerUuid)
                 .replace("&", "§");
 
         if (!addonPrefix.isEmpty()) {
-            return Text.empty().append(addonPrefix + " ").append(oldNameTagText);
+            return Component.empty().append(addonPrefix + " ").append(oldNameTagComponent);
         }
-        return oldNameTagText;
+        return oldNameTagComponent;
     }
 
     /**

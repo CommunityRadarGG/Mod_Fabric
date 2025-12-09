@@ -18,9 +18,9 @@ package io.github.communityradargg.fabric.accessors;
 import java.util.UUID;
 
 /**
- * Serves as accessor for the self added field in the {@link net.minecraft.client.render.entity.PlayerEntityRenderer} class.
+ * Serves as accessor for the self added field in the {@link net.minecraft.client.renderer.entity.player.AvatarRenderer} class.
  */
-public interface PlayerEntityRenderStateAccessor {
+public interface AvatarRenderStateAccessor {
     /**
      * Gets the player uuid field value.
      *
