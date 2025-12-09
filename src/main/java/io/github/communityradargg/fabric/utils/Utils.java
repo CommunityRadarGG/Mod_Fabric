@@ -183,19 +183,19 @@ public class Utils {
     /**
      * Builds the new component including the radar prefix.
      *
-     * @param playerUuid The uuid of the player to get the text with the radar prefix for.
-     * @param oldNameTagText The old component that should be extended, if needed.
-     * @return The new component for the including the radar prefix.
+     * @param playerUuid The uuid of the player to get the component with the radar prefix for.
+     * @param oldNameTagComponent The old component that should be extended, if needed.
+     * @return The new component including the radar prefix.
      */
-    public static Component includePrefixText(final @NotNull UUID playerUuid, final @NotNull Component oldNameTagText) {
+    public static Component includePrefixComponent(final @NotNull UUID playerUuid, final @NotNull Component oldNameTagComponent) {
         final String addonPrefix = CommunityRadarMod.getListManager()
                 .getPrefix(playerUuid)
                 .replace("&", "§");
 
         if (!addonPrefix.isEmpty()) {
-            return Component.empty().append(addonPrefix + " ").append(oldNameTagText);
+            return Component.empty().append(addonPrefix + " ").append(oldNameTagComponent);
         }
-        return oldNameTagText;
+        return oldNameTagComponent;
     }
 
     /**

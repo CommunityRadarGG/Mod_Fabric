@@ -41,6 +41,6 @@ public abstract class PlayerTabOverlayMixin {
         if (!Utils.isOnGrieferGames()) {
             return component;
         }
-        return Utils.includePrefixText(playerInfo.getProfile().id(), component);
+        return Utils.includePrefixComponent(playerInfo.getProfile().id(), component);
     }
 }

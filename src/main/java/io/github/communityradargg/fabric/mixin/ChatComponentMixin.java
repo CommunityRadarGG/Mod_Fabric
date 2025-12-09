@@ -54,7 +54,7 @@ public abstract class ChatComponentMixin {
             final Optional<UUID> playerUuid = Utils.getChatMessagePlayer(component.getString()).get();
 
             if (playerUuid.isPresent() && CommunityRadarMod.getListManager().isInList(playerUuid.get())) {
-                return Utils.includePrefixText(playerUuid.get(), component);
+                return Utils.includePrefixComponent(playerUuid.get(), component);
             }
         } catch (final ExecutionException | InterruptedException e) {
             logger.error("Could not get the player uuid in the message edit process", e);

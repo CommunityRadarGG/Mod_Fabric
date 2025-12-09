@@ -56,7 +56,7 @@ public abstract class AvatarRendererMixin {
         if (uuid == null || !Utils.isOnGrieferGames()) {
             return component;
         }
-        return Utils.includePrefixText(uuid, component);
+        return Utils.includePrefixComponent(uuid, component);
     }
 
     /**
