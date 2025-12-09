@@ -33,9 +33,9 @@ import java.util.concurrent.ExecutionException;
  * An abstract Mixin class for {@link ChatComponent}.
  */
 @Mixin(ChatComponent.class)
-public abstract class ChatHudMixin {
+public abstract class ChatComponentMixin {
     @Unique
-    private static final Logger logger = LoggerFactory.getLogger(ChatHudMixin.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChatComponentMixin.class);
 
     /**
      * Modifies the player chat messages. This gets called when a message should be added to the player chat.
@@ -44,7 +44,7 @@ public abstract class ChatHudMixin {
      * @return Returns the modified local variable.
      */
     @ModifyVariable(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V", at = @At(value = "HEAD"), index = 1, argsOnly = true)
-    private Component modifyChatMessages(final Component component) {
+    private Component modifyAddMessage(final Component component) {
         if (!Utils.isOnGrieferGames()) {
             return component;
         }

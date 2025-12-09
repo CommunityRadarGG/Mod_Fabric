@@ -15,7 +15,7 @@
  */
 package io.github.communityradargg.fabric.mixin;
 
-import io.github.communityradargg.fabric.accessors.PlayerEntityRenderStateAccessor;
+import io.github.communityradargg.fabric.accessors.AvatarRenderStateAccessor;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -25,7 +25,7 @@ import java.util.UUID;
  * Mixin for the class {@link AvatarRenderState}.
  */
 @Mixin(AvatarRenderState.class)
-public class PlayerEntityRenderStateMixin implements PlayerEntityRenderStateAccessor {
+public class AvatarRenderStateMixin implements AvatarRenderStateAccessor {
     @Unique
     private UUID communityradar_fabric$playerUuid;
 

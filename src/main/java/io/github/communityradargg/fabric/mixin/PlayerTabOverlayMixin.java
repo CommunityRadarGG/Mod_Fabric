@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.At;
  * An abstract Mixin class for {@link PlayerTabOverlay}.
  */
 @Mixin(PlayerTabOverlay.class)
-public abstract class PlayerListHudMixin {
+public abstract class PlayerTabOverlayMixin {
     /**
      * Modifies the player info component. This gets called when the player info gets updated.
      *
@@ -37,7 +37,7 @@ public abstract class PlayerListHudMixin {
      * @return Returns the modified local variable.
      */
     @ModifyReturnValue(method = "getNameForDisplay", at = @At("RETURN"))
-    private Component modifyGetPlayerName(final Component component, final @Local(argsOnly = true) PlayerInfo playerInfo) {
+    private Component modifyGetNameForDisplay(final Component component, final @Local(argsOnly = true) PlayerInfo playerInfo) {
         if (!Utils.isOnGrieferGames()) {
             return component;
         }

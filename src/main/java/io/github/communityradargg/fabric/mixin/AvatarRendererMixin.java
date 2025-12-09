@@ -16,7 +16,7 @@
 package io.github.communityradargg.fabric.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import io.github.communityradargg.fabric.accessors.PlayerEntityRenderStateAccessor;
+import io.github.communityradargg.fabric.accessors.AvatarRenderStateAccessor;
 import io.github.communityradargg.fabric.utils.Utils;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
@@ -33,7 +33,7 @@ import java.util.UUID;
  * An abstract Mixin class for {@link AvatarRenderer}.
  */
 @Mixin(AvatarRenderer.class)
-public abstract class PlayerEntityRendererMixin {
+public abstract class AvatarRendererMixin {
     /**
      * Modifies the player name tag. This gets called once every tick with the original non-modified prefix.
      *
@@ -50,8 +50,8 @@ public abstract class PlayerEntityRendererMixin {
             ),
             index = 3
     )
-    private Component modifyPlayerNameTag(final Component component, final @Local(index = 1, argsOnly = true) AvatarRenderState avatarRenderState) {
-        final UUID uuid = ((PlayerEntityRenderStateAccessor) avatarRenderState).communityradar_fabric$getPlayerUuid();
+    private Component modifySubmitNameTag(final Component component, final @Local(index = 1, argsOnly = true) AvatarRenderState avatarRenderState) {
+        final UUID uuid = ((AvatarRenderStateAccessor) avatarRenderState).communityradar_fabric$getPlayerUuid();
 
         if (uuid == null || !Utils.isOnGrieferGames()) {
             return component;
@@ -68,7 +68,7 @@ public abstract class PlayerEntityRendererMixin {
      * @param ci The callback info.
      */
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/Avatar;Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;F)V", at = @At(value = "TAIL"))
-    private void modifyUpdateRenderState(final Avatar avatar, final AvatarRenderState avatarRenderState, final float f, final CallbackInfo ci) {
-        ((PlayerEntityRenderStateAccessor) avatarRenderState).communityradar_fabric$setPlayerUuid(avatar.getUUID());
+    private void modifyExtractRenderState(final Avatar avatar, final AvatarRenderState avatarRenderState, final float f, final CallbackInfo ci) {
+        ((AvatarRenderStateAccessor) avatarRenderState).communityradar_fabric$setPlayerUuid(avatar.getUUID());
     }
 }
