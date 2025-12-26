@@ -32,25 +32,22 @@ repositories {
 }
 
 dependencies {
-    // To change the versions see the gradle.properties file
     minecraft(libs.minecraft)
-    mappings(loom.officialMojangMappings())
-    modImplementation(libs.fabricLoader)
+    implementation(libs.fabricLoader)
 
-    // Make a set of all api modules we wish to use
     setOf(
         "fabric-api-base",
         "fabric-command-api-v2"
     ).forEach {
         // Add each module as a dependency
-        modImplementation(fabricApi.module(it, libs.versions.fabricApi.get()))
+        implementation(fabricApi.module(it, libs.versions.fabricApi.get()))
     }
 
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(25))
     }
     // withSourcesJar()
     // withJavadocJar()
@@ -81,7 +78,7 @@ tasks {
 
     withType<JavaCompile> {
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(21)
+        options.release.set(25)
     }
 
     withType<Javadoc> {
@@ -93,7 +90,7 @@ tasks {
             use()
         }
 
-        jar {
+        named<Jar>("jar") {
             from("LICENSE") {
                 rename { "${it}_${archivesName}" }
             }
