@@ -14,14 +14,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
-          java-version: 21
+          java-version: 25
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
@@ -33,7 +33,7 @@ jobs:
           echo $version
       - name: Upload Artifact
         if: startsWith(github.event.head_commit.message || '', 'Release')
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: communityradar-${{ env.VERSION }}
           path: build/libs/*-${{ env.VERSION }}.jar
