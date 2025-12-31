@@ -6,7 +6,7 @@ spotless = "8.1.0"
 # Libraries
 minecraft = "26.1-snapshot-1"
 fabricLoader = "0.18.4"
-fabricApi = "0.140.2+26.1"
+fabricApi = "0.140.3+26.1"
 
 [libraries]
 minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
