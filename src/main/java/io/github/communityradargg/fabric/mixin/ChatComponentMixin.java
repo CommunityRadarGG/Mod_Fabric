@@ -43,7 +43,7 @@ public abstract class ChatComponentMixin {
      * @param component The original chat message component to modify.
      * @return Returns the modified local variable.
      */
-    @ModifyVariable(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V", at = @At(value = "HEAD"), index = 1, argsOnly = true)
+    @ModifyVariable(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/multiplayer/chat/GuiMessageSource;Lnet/minecraft/client/multiplayer/chat/GuiMessageTag;)V", at = @At(value = "HEAD"), index = 1, argsOnly = true)
     private Component modifyAddMessage(final Component component) {
         if (!Utils.isOnGrieferGames()) {
             return component;

@@ -12,6 +12,7 @@
         "AvatarRendererMixin",
         "AvatarRenderStateMixin",
         "ChatComponentMixin",
+        "EntityRendererMixin",
         "PlayerTabOverlayMixin"
     ]
 }
