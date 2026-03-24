@@ -27,7 +27,7 @@ import io.github.communityradargg.fabric.radarlistmanager.RadarListVisibility;
 import io.github.communityradargg.fabric.utils.Messages;
 import io.github.communityradargg.fabric.utils.RadarMessage;
 import io.github.communityradargg.fabric.utils.Utils;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -45,30 +45,30 @@ public class RadarCommand {
     private static final PermissionLevel REQUIRED_PERMISSION_LEVEL = PermissionLevel.ALL;
 
     public static void register(final @NotNull CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        final LiteralCommandNode<FabricClientCommandSource> mainCommand = dispatcher.register(ClientCommandManager.literal(COMMAND_NAME)
+        final LiteralCommandNode<FabricClientCommandSource> mainCommand = dispatcher.register(ClientCommands.literal(COMMAND_NAME)
                 .requires(source -> source.getPlayer().permissions().hasPermission(new Permission.HasCommandLevel(REQUIRED_PERMISSION_LEVEL)))
-                .then(ClientCommandManager.literal("help")
+                .then(ClientCommands.literal("help")
                         .executes(context -> handleHelpSubcommand(context.getSource()))
                 )
-                .then(ClientCommandManager.literal("lists")
+                .then(ClientCommands.literal("lists")
                         .executes(context -> {
                             handleListsSubcommand(context.getSource());
                             return Command.SINGLE_SUCCESS;
                         })
                 )
-                .then(ClientCommandManager.literal("check")
-                        .then(ClientCommandManager.argument("player", StringArgumentType.string())
+                .then(ClientCommands.literal("check")
+                        .then(ClientCommands.argument("player", StringArgumentType.string())
                                 .executes(context -> {
                                     final String player = StringArgumentType.getString(context, "player");
                                     return handleCheckSubcommand(context.getSource(), player);
                                 }))
                         .executes(context -> handleMissingArgs(context.getSource()))
                 )
-                .then(ClientCommandManager.literal("player")
-                        .then(ClientCommandManager.literal("add")
-                                .then(ClientCommandManager.argument("namespace", StringArgumentType.string())
-                                        .then(ClientCommandManager.argument("player", StringArgumentType.string())
-                                                .then(ClientCommandManager.argument("cause", StringArgumentType.greedyString())
+                .then(ClientCommands.literal("player")
+                        .then(ClientCommands.literal("add")
+                                .then(ClientCommands.argument("namespace", StringArgumentType.string())
+                                        .then(ClientCommands.argument("player", StringArgumentType.string())
+                                                .then(ClientCommands.argument("cause", StringArgumentType.greedyString())
                                                         .executes(context -> {
                                                             final String namespace = StringArgumentType.getString(context, "namespace");
                                                             final String player = StringArgumentType.getString(context, "player");
@@ -83,9 +83,9 @@ public class RadarCommand {
                                 )
                                 .executes(context -> handleMissingArgs(context.getSource()))
                         )
-                        .then(ClientCommandManager.literal("remove")
-                                .then(ClientCommandManager.argument("namespace", StringArgumentType.string())
-                                        .then(ClientCommandManager.argument("player", StringArgumentType.string())
+                        .then(ClientCommands.literal("remove")
+                                .then(ClientCommands.argument("namespace", StringArgumentType.string())
+                                        .then(ClientCommands.argument("player", StringArgumentType.string())
                                                 .executes(context -> {
                                                     final String namespace = StringArgumentType.getString(context, "namespace");
                                                     final String player = StringArgumentType.getString(context, "player");
@@ -99,10 +99,10 @@ public class RadarCommand {
                         )
                         .executes(context -> handleHelpSubcommand(context.getSource()))
                 )
-                .then(ClientCommandManager.literal("list")
-                        .then(ClientCommandManager.literal("add")
-                                .then(ClientCommandManager.argument("namespace", StringArgumentType.string())
-                                        .then(ClientCommandManager.argument("prefix", StringArgumentType.greedyString())
+                .then(ClientCommands.literal("list")
+                        .then(ClientCommands.literal("add")
+                                .then(ClientCommands.argument("namespace", StringArgumentType.string())
+                                        .then(ClientCommands.argument("prefix", StringArgumentType.greedyString())
                                                 .executes(context -> {
                                                     final String namespace = StringArgumentType.getString(context, "namespace");
                                                     final String prefix = StringArgumentType.getString(context, "prefix");
@@ -114,8 +114,8 @@ public class RadarCommand {
                                 )
                                 .executes(context -> handleMissingArgs(context.getSource()))
                         )
-                        .then(ClientCommandManager.literal("delete")
-                                .then(ClientCommandManager.argument("namespace", StringArgumentType.string())
+                        .then(ClientCommands.literal("delete")
+                                .then(ClientCommands.argument("namespace", StringArgumentType.string())
                                         .executes(context -> {
                                             final String namespace = StringArgumentType.getString(context, "namespace");
                                             handleListDeleteSubcommand(context.getSource(), namespace);
@@ -124,8 +124,8 @@ public class RadarCommand {
                                 )
                                 .executes(context -> handleMissingArgs(context.getSource()))
                         )
-                        .then(ClientCommandManager.literal("show")
-                                .then(ClientCommandManager.argument("namespace", StringArgumentType.string())
+                        .then(ClientCommands.literal("show")
+                                .then(ClientCommands.argument("namespace", StringArgumentType.string())
                                         .executes(context -> {
                                             final String namespace = StringArgumentType.getString(context, "namespace");
                                             handleListShowSubcommand(context.getSource(), namespace);
@@ -134,9 +134,9 @@ public class RadarCommand {
                                 )
                                 .executes(context -> handleMissingArgs(context.getSource()))
                         )
-                        .then(ClientCommandManager.literal("prefix")
-                                .then(ClientCommandManager.argument("namespace", StringArgumentType.string())
-                                        .then(ClientCommandManager.argument("prefix", StringArgumentType.greedyString())
+                        .then(ClientCommands.literal("prefix")
+                                .then(ClientCommands.argument("namespace", StringArgumentType.string())
+                                        .then(ClientCommands.argument("prefix", StringArgumentType.greedyString())
                                                 .executes(context -> {
                                                     final String namespace = StringArgumentType.getString(context, "namespace");
                                                     final String prefix = StringArgumentType.getString(context, "prefix");
@@ -151,7 +151,7 @@ public class RadarCommand {
                         .executes(context -> handleHelpSubcommand(context.getSource()))
                 )
                 .executes(context -> handleHelpSubcommand(context.getSource())));
-        COMMAND_ALIASES.forEach(alias -> dispatcher.register(ClientCommandManager.literal(alias).redirect(mainCommand)));
+        COMMAND_ALIASES.forEach(alias -> dispatcher.register(ClientCommands.literal(alias).redirect(mainCommand)));
     }
 
     /**
