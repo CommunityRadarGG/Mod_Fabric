@@ -4,9 +4,9 @@ fabricLoom = "1.15-SNAPSHOT"
 spotless = "8.1.0"
 
 # Libraries
-minecraft = "26.1-rc-2"
+minecraft = "26.1"
 fabricLoader = "0.18.4" # on change - check if fabric.mod.json needs to be increased
-fabricApi = "0.143.15+26.1"
+fabricApi = "0.144.0+26.1"
 
 [libraries]
 minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
