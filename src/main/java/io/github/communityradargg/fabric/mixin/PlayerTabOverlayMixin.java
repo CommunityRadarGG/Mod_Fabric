@@ -33,14 +33,14 @@ public abstract class PlayerTabOverlayMixin {
      * Modifies the player info component. This gets called when the player info gets updated.
      *
      * @param component The original chat message component to modify.
-     * @param playerInfo The needed local variable of the player info.
+     * @param info The needed local variable of the player info.
      * @return Returns the modified local variable.
      */
     @ModifyReturnValue(method = "getNameForDisplay", at = @At("RETURN"))
-    private Component modifyGetNameForDisplay(final Component component, final @Local(argsOnly = true) PlayerInfo playerInfo) {
+    private Component modifyGetNameForDisplay(final Component component, final @Local(argsOnly = true, name = "info") PlayerInfo info) {
         if (!Utils.isOnGrieferGames()) {
             return component;
         }
-        return Utils.includePrefixComponent(playerInfo.getProfile().id(), component);
+        return Utils.includePrefixComponent(info.getProfile().id(), component);
     }
 }
