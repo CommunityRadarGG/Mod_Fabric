@@ -40,25 +40,25 @@ public abstract class ChatComponentMixin {
     /**
      * Modifies the player chat messages. This gets called when a message should be added to the player chat.
      *
-     * @param component The original chat message component to modify.
+     * @param contents The original chat message content component to modify.
      * @return Returns the modified local variable.
      */
-    @ModifyVariable(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/multiplayer/chat/GuiMessageSource;Lnet/minecraft/client/multiplayer/chat/GuiMessageTag;)V", at = @At(value = "HEAD"), index = 1, argsOnly = true)
-    private Component modifyAddMessage(final Component component) {
+    @ModifyVariable(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/multiplayer/chat/GuiMessageSource;Lnet/minecraft/client/multiplayer/chat/GuiMessageTag;)V", at = @At(value = "HEAD"), argsOnly = true, name = "contents")
+    private Component modifyAddMessage(final Component contents) {
         if (!Utils.isOnGrieferGames()) {
-            return component;
+            return contents;
         }
 
         // On a chat message there should be never be the need to call to the Mojang API.
         try {
-            final Optional<UUID> playerUuid = Utils.getChatMessagePlayer(component.getString()).get();
+            final Optional<UUID> playerUuid = Utils.getChatMessagePlayer(contents.getString()).get();
 
             if (playerUuid.isPresent() && CommunityRadarMod.getListManager().isInList(playerUuid.get())) {
-                return Utils.includePrefixComponent(playerUuid.get(), component);
+                return Utils.includePrefixComponent(playerUuid.get(), contents);
             }
         } catch (final ExecutionException | InterruptedException e) {
             logger.error("Could not get the player uuid in the message edit process", e);
         }
-        return component;
+        return contents;
     }
 }

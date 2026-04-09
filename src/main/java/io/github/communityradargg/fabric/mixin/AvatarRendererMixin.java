@@ -32,13 +32,13 @@ public abstract class AvatarRendererMixin {
     /**
      * Modifies the player entity render state to set the self added uuid field.
      *
-     * @param avatar The avatar as the source for the uuid.
-     * @param avatarRenderState The avatar render state to set the uuid.
-     * @param f The float f.
+     * @param entity The avatar as the entity source for the uuid.
+     * @param state The avatar render state to set the uuid.
+     * @param partialTicks The partial ticks.
      * @param ci The callback info.
      */
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/Avatar;Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;F)V", at = @At(value = "TAIL"))
-    private void modifyExtractRenderState(final Avatar avatar, final AvatarRenderState avatarRenderState, final float f, final CallbackInfo ci) {
-        ((AvatarRenderStateAccessor) avatarRenderState).communityradar_fabric$setPlayerUuid(avatar.getUUID());
+    private void modifyExtractRenderState(final Avatar entity, final AvatarRenderState state, final float partialTicks, final CallbackInfo ci) {
+        ((AvatarRenderStateAccessor) state).communityradar_fabric$setPlayerUuid(entity.getUUID());
     }
 }
