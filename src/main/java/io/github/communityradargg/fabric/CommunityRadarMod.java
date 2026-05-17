@@ -59,7 +59,7 @@ public class CommunityRadarMod implements ModInitializer {
      * Registers the commands.
      */
     private void registerCommands() {
-        ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> RadarCommand.register(dispatcher)));
+        ClientCommandRegistrationCallback.EVENT.register(((dispatcher, _) -> RadarCommand.register(dispatcher)));
     }
 
     /**
