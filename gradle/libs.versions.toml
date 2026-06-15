@@ -1,6 +1,6 @@
 [versions]
 # Plugins
-fabricLoom = "1.16-SNAPSHOT"
+fabricLoom = "1.17-SNAPSHOT"
 spotless = "8.6.0"
 
 # Libraries
