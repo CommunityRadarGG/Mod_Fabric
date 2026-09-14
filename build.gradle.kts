@@ -90,7 +90,7 @@ tasks {
 
     withType<ProcessResources>().configureEach {
         // https://github.com/gradle/gradle/issues/861
-        inputs.property("projectVersion", projectVersion)
+        inputs.properties(filterExpandProperties)
 
         filesMatching("fabric.mod.json") {
             expand(filterExpandProperties)
@@ -104,7 +104,6 @@ tasks {
     withType<Javadoc>().configureEach {
         with(options as StandardJavadocDocletOptions) {
             encoding(Charsets.UTF_8.name())
-            addStringOption("Xdoclint:reference,syntax,html,missing", "-quiet")
             keyWords()
             linkSource()
             use()
