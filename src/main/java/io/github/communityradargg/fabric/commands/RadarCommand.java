@@ -35,6 +35,7 @@ import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.server.permissions.Permission;
 import net.minecraft.server.permissions.PermissionLevel;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
