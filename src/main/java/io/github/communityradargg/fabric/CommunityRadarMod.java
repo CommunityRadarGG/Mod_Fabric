@@ -18,13 +18,13 @@ package io.github.communityradargg.fabric;
 import io.github.communityradargg.fabric.commands.RadarCommand;
 import io.github.communityradargg.fabric.radarlistmanager.RadarListManager;
 import net.fabricmc.api.ModInitializer;
-
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Optional;
