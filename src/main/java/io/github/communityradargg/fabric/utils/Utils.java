@@ -51,7 +51,7 @@ public class Utils {
     private static final Logger logger = LogManager.getLogger(Utils.class);
     private static final String MOJANG_API_NAME_TO_UUID = "https://api.mojang.com/users/profiles/minecraft/";
     private static final Pattern UUID_MOJANG_API_PATTERN = Pattern.compile("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})");
-    private static final Pattern CHAT_PLAYER_NAME = Pattern.compile("[A-Za-z\\-+]+\\s\\u2503\\s(~?!?\\w{1,16})");
+    private static final Pattern CHAT_PLAYER_NAME = Pattern.compile("([A-Za-z\\-+]+)\\s\\u2503\\s(~?!?\\w{1,16})");
     private static final DateTimeFormatter readableDateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
     private static final Map<String, UUID> uuidNameCache = new HashMap<>();
     private static final HttpClient httpClient = HttpClient.newBuilder()
@@ -211,8 +211,9 @@ public class Utils {
             return CompletableFuture.completedFuture(Optional.empty());
         }
 
-        final String playerName = playerNameMatcher.group(1);
-        if (playerName.startsWith("~")) {
+        final String playerRank = playerNameMatcher.group(1);
+        final String playerName = playerNameMatcher.group(2);
+        if ("KI-Support".equalsIgnoreCase(playerRank) || playerName.startsWith("~")) {
             // nicked player
             return CompletableFuture.completedFuture(Optional.empty());
         }
