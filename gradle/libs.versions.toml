@@ -1,7 +1,7 @@
 [versions]
 # Plugins
-fabricLoom = "1.17-SNAPSHOT"
-spotless = "8.10.3"
+fabricLoom = "1.18-SNAPSHOT"
+spotless = "8.10.4"
 
 # Libraries
 minecraft = "26.3"
