@@ -13,18 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 plugins {
-    id("java")
+    java
     alias(libs.plugins.fabricLoom)
     alias(libs.plugins.spotless)
 }
 
-version = project.extra["mod_version"] as String
-group = project.extra["maven_group"] as String
+val projectGroupId = providers.gradleProperty("group-id")
+val projectVersion = providers.gradleProperty("version")
+val archivesBaseName = providers.gradleProperty("archives-base-name")
+
+group = projectGroupId.get()
+version = projectVersion.get()
 
 base {
-    archivesName.set(project.extra["archives_base_name"] as String)
+    archivesName = archivesBaseName
 }
 
 repositories {
@@ -39,52 +42,68 @@ dependencies {
         "fabric-api-base",
         "fabric-command-api-v2"
     ).forEach {
-        // Add each module as a dependency
         implementation(fabricApi.module(it, libs.versions.fabricApi.get()))
     }
-
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(25))
+        languageVersion = JavaLanguageVersion.of(25)
     }
-    // withSourcesJar()
-    // withJavadocJar()
+}
+
+spotless {
+    java {
+        endWithNewline()
+        licenseHeaderFile(rootProject.projectDir.resolve("HEADER"))
+        importOrder("", "javax.|java.", "\\#")
+        trimTrailingWhitespace()
+        removeUnusedImports()
+        forbidWildcardImports()
+        forbidModuleImports()
+        shortenFullyQualifiedTypes()
+    }
+
+    kotlinGradle {
+        endWithNewline()
+        licenseHeaderFile(rootProject.projectDir.resolve("HEADER"), "(import|plugins|buildscript|pluginManagement|base|root)")
+        trimTrailingWhitespace()
+    }
+
+    kotlin {
+        endWithNewline()
+        licenseHeaderFile(rootProject.projectDir.resolve("HEADER"))
+        trimTrailingWhitespace()
+    }
 }
 
 tasks {
-    var archivesName = project.base.archivesName.get()
-    val filterExpandProps = mapOf(
-        "version" to project.version,
-        "loader_version" to libs.versions.fabricLoader.get(),
+    val filterExpandProperties = mapOf(
+        "version" to projectVersion.get(),
         "minecraft_version" to libs.versions.minecraft.get()
             .replace("-pre-", "-beta.")
             .replace("-rc-", "-rc."),
-        "website" to project.extra.get("website") as String,
-        "source" to project.extra.get("source") as String,
-        "discord" to project.extra.get("discord") as String
+        "website" to providers.gradleProperty("website").get(),
+        "source" to providers.gradleProperty("source").get(),
+        "discord" to providers.gradleProperty("discord").get()
     )
 
-    withType<ProcessResources> {
+    withType<ProcessResources>().configureEach {
         // https://github.com/gradle/gradle/issues/861
-        outputs.upToDateWhen { false }
+        inputs.properties(filterExpandProperties)
 
-        filteringCharset = Charsets.UTF_8.name()
         filesMatching("fabric.mod.json") {
-            expand(filterExpandProps)
+            expand(filterExpandProperties)
         }
     }
 
-    withType<JavaCompile> {
+    withType<JavaCompile>().configureEach {
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(25)
     }
 
-    withType<Javadoc> {
+    withType<Javadoc>().configureEach {
         with(options as StandardJavadocDocletOptions) {
             encoding(Charsets.UTF_8.name())
-            addStringOption("Xdoclint:reference,syntax,html,missing", "-quiet")
             keyWords()
             linkSource()
             use()
@@ -92,25 +111,8 @@ tasks {
 
         named<Jar>("jar") {
             from("LICENSE") {
-                rename { "${it}_${archivesName}" }
+                rename { "${it}_${archivesBaseName.get()}" }
             }
         }
-    }
-}
-
-spotless {
-    java {
-        licenseHeaderFile(rootProject.file("HEADER"))
-        endWithNewline()
-        trimTrailingWhitespace()
-        removeUnusedImports()
-        forbidWildcardImports()
-        forbidModuleImports()
-    }
-
-    kotlin {
-        licenseHeaderFile(rootProject.file("HEADER"))
-        endWithNewline()
-        trimTrailingWhitespace()
     }
 }

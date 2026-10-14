@@ -26,6 +26,7 @@ import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.http.HttpClient;
