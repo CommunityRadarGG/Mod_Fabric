@@ -17,6 +17,7 @@ package io.github.communityradargg.fabric.radarlistmanager;
 
 import com.google.gson.annotations.SerializedName;
 import org.jetbrains.annotations.NotNull;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
