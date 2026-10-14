@@ -32,8 +32,6 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
-import net.minecraft.server.permissions.Permission;
-import net.minecraft.server.permissions.PermissionLevel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -43,11 +41,9 @@ import java.util.UUID;
 public class RadarCommand {
     private static final String COMMAND_NAME = "radar";
     private static final List<String> COMMAND_ALIASES = List.of("communityradar", "scammer", "trustedmm", "mm");
-    private static final PermissionLevel REQUIRED_PERMISSION_LEVEL = PermissionLevel.ALL;
 
     public static void register(final @NotNull CommandDispatcher<FabricClientCommandSource> dispatcher) {
         final LiteralCommandNode<FabricClientCommandSource> mainCommand = dispatcher.register(ClientCommands.literal(COMMAND_NAME)
-                .requires(source -> source.getPlayer().permissions().hasPermission(new Permission.HasCommandLevel(REQUIRED_PERMISSION_LEVEL)))
                 .then(ClientCommands.literal("help")
                         .executes(context -> handleHelpSubcommand(context.getSource()))
                 )
@@ -152,6 +148,7 @@ public class RadarCommand {
                         .executes(context -> handleHelpSubcommand(context.getSource()))
                 )
                 .executes(context -> handleHelpSubcommand(context.getSource())));
+
         COMMAND_ALIASES.forEach(alias -> dispatcher.register(ClientCommands.literal(alias).redirect(mainCommand)));
     }
 
